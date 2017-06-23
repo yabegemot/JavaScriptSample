@@ -1,0 +1,84 @@
+{# empty Twig template #}
+{% extends 'SmartMainBundle::layout.html.twig' %}
+{% block stylesheets %}
+    {{ parent() }}
+
+{% endblock %}
+{% block content %}
+    <div class="col-lg-12" style="margin-bottom: 60px;">
+        <h1>Reports</h1>
+    </div>
+    <div class="clearfix"></div>
+    <div class="dozcol-xs-12 dozcol-sm-12 dozcol-md-12 deccol-lg-10">
+        {% if is_granted(voter.ReportVoter.COMPANY_ACCESS, app.user) and (is_granted('ROLE_REQUESTOR') or is_granted('ROLE_SUPPLIER')) %}
+            <div class="report-button dozcol-xs-6 dozcol-sm-4 dozcol-md-3 deccol-lg-2">
+                <a href="{{ path('reservation_report_new') }}" class="button orange ">
+                    <div class="icon-1"><span class="icon-icons_reservation glyph"></span></div><br/>
+                    {% trans %}Reservation{% endtrans %}
+                </a>
+            </div>
+        {% endif %}
+        {% if is_granted(voter.ReportVoter.COMPANY_ACCESS, app.user) and (is_granted('ROLE_REQUESTOR') or is_granted('ROLE_SUPPLIER')) %}
+            <div class="report-button dozcol-xs-6 dozcol-sm-4 dozcol-md-3 deccol-lg-2">
+                <a href="{{ path('referral_new') }}" class="button orange">
+                    <div class="icon-2"><span class="icon-icons_referral_fees glyph"></span></div><br/>
+                    {% trans %}Referral/Commission{% endtrans %}
+                </a>
+            </div>
+        {% endif %}
+        {% if is_granted('ROLE_REQUESTOR') and is_granted(voter.ReportVoter.COMPANY_ACCESS, app.user) %}
+            <div class="report-button dozcol-xs-6 dozcol-sm-4 dozcol-md-3 deccol-lg-2">
+                <a href="{{ path('budget_variance_new') }}" class="button orange ">
+                    <div class="icon-3"><span class="icon-icons_budget_variance glyph"></span></div><br/>
+                    {% trans %}Budget Variance{% endtrans %}
+                </a>
+            </div>
+            <div class="report-button dozcol-xs-6 dozcol-sm-4 dozcol-md-3 deccol-lg-2">
+                <a href="{{ path('average_stay_new') }}" class="button orange ">
+                   <div class="icon-1"><span class="icon-icons_average_stay glyph"></span></div><br/>
+                    {% trans %}Average Stay{% endtrans %}
+                </a>
+            </div>
+            <div class="report-button dozcol-xs-6 dozcol-sm-4 dozcol-md-3 deccol-lg-2">
+                <a href="{{ path('average_rate_new') }}" class="button orange ">
+                    <div class="icon-2"><span class="icon-icons_average_rate glyph"></span></div><br/>
+                    {% trans %}Average Rate{% endtrans %}
+                </a>
+            </div>
+            <div class="report-button dozcol-xs-6 dozcol-sm-4 dozcol-md-3 deccol-lg-2">
+                <a href="{{ path('supplier_requests_new') }}" class="button orange ">
+                    <div class="icon-3"><span class="icon-icons_total_supplier_requests glyph"></span></div><br/>
+                    {% trans %}Total Supplier Requests{% endtrans %}
+                </a>
+            </div>
+        {% endif %}
+        {% if is_granted(voter.ReportVoter.COMPANY_ACCESS, app.user) and (is_granted('ROLE_REQUESTOR') or is_granted('ROLE_SUPPLIER')) %}
+            <div class="report-button dozcol-xs-6 dozcol-sm-4 dozcol-md-3 deccol-lg-2">
+                <a href="{{ path('supplier_company_requests_new') }}" class="button orange ">
+                    <div class="icon-1"><span class="icon-icons_request_received_by_supplier glyph"></span></div><br/>
+                    {% trans %}Requests received by Supplier{% endtrans %}
+                </a>
+            </div>
+            <div class="report-button dozcol-xs-6 dozcol-sm-4 dozcol-md-3 deccol-lg-2">
+                <a href="{{ path('requests_lost_new') }}" class="button orange ">
+                    <div class="icon-2"><span class="icon-icons_request_lost_by_reason glyph"></span></div><br/>
+                    {% trans %}Requests Lost by Reason{% endtrans %}
+                </a>
+            </div>
+
+        {% endif %}
+        {% if is_granted(voter.ReportVoter.COMPANY_ACCESS, app.user) and is_granted('ROLE_REQUESTOR') %}
+            <div class="report-button dozcol-xs-6 dozcol-sm-4 dozcol-md-3 deccol-lg-2">
+                <a href="{{ path('supplier_scorecard_new') }}" class="button orange ">
+                    <div class="icon-3"><span class="icon-icons_supplier_scorecard glyph"></span></div><br/>
+                    {% trans %}Supplier Scorecard{% endtrans %}
+                </a>
+            </div>
+        {% endif %}
+    </div>
+    <div class="clearfix"></div>
+    <div class="dozcol-xs-12 dozcol-sm-12 dozcol-md-12 deccol-lg-10">
+        &nbsp;
+    </div>
+    <div class="clearfix"></div>
+{% endblock %}

@@ -1,0 +1,216 @@
+{% extends 'SmartMainBundle::layout.html.twig' %}
+{% block require %}
+    <script data-main="bundles/smartmain/js/report/report.min" src="{{ asset('assets/require.min.js') }}"></script>
+{% endblock %}
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="//kendo.cdn.telerik.com/2016.3.914/styles/kendo.common.min.css"/>
+    <link rel="stylesheet" href="//kendo.cdn.telerik.com/2016.3.914/styles/kendo.common-bootstrap.min.css"/>
+    <link rel="stylesheet" href="//kendo.cdn.telerik.com/2016.3.914/styles/kendo.bootstrap.min.css"/>
+    <link rel="stylesheet" href="//kendo.cdn.telerik.com/2016.3.914/styles/kendo.default.mobile.min.css"/>
+    <link rel="stylesheet" href="{{ asset('css/kendo-grid.css') }}"/>
+{% endblock %}
+{% block content %}
+
+    <div class="report-tab clearfix">
+        <ul class="nav nav-tabs nav-pills col-lg-12" data-reactid=".1.1.0">
+            <li class="" role="presentation">
+                <a id="go_back" href="" class="btn btn-large">
+                    <span class="tabIcon icon-report-back"></span>
+                </a>
+            </li>
+            <li class="{{ activeTab == 'report' ? 'active' : '' }}" role="presentation">
+                <a href="#report-table-tab" data-toggle="tab" class="btn btn-large{{ activeTab == 'report' ? ' active-tab' : '' }}">
+                    <span class="tabIcon icon-icons_average_rate"></span>
+                </a>
+            </li>
+            <li class="" role="presentation" style="padding-top: 20px;">
+                <h2>{{ report_name }} Report Result</h2>
+            </li>
+            <li class="dataTables_wrapper form-inline dt-bootstrap" role="presentation" style="float: none; padding-top: 6px; text-align: right;">
+                <div id="table-controls" style="min-width: 600px; float: right;">
+                    <div style="float: right; vertical-align: middle; margin: 0px 0px 0px 24px;"><a id="report-configuration-button" class="btn btn-xs btn-link-gray" role="button" href=""
+                                                                                                    style="font-size: 14px;">show filters</a></div>
+                </div>
+            </li>
+        </ul>
+
+        <div class="tab-content">
+            <div class="tab-pane{{ activeTab == 'report' ? ' active' : '' }}" id="report-table-tab">
+
+                <div class="clearfix"></div>
+
+                <div id="report-configuration">
+                    {{ form_start(form, {'attr': {'id': 'report-form', 'class' : 'form-horizontal', 'role' : 'form' }}) }}
+                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                        <div class="col-sm-3 col-md-3 col-lg-2 col-xl-2 label">
+                            {{ form_label(form.name) }}:
+                        </div>
+                        <div class="col-xs-12 col-sm-3 col-md-3 col-lg-3 col-xl-3">
+                            {{ form_widget(form.name, {'attr': {'class': 'form-control' } }) }}{{ form_errors(form.name) }}
+                        </div>
+                        <div class="col-xs-12 col-sm-7 col-md-7 col-lg-7 col-xl-8" style="text-align: right;">
+                            {{ form_widget(form.csv) }}
+                        </div>
+                        <div class="clearfix"></div>
+
+                        {% if form.dateRangeOption is defined and form.dateRangeToOption is defined %}
+                            <div class="col-xs-12 col-sm-3 col-md-3 col-lg-2 col-xl-2 label">
+                                <label>From:</label>
+                            </div>
+                            <div class="col-xs-12 col-sm-3 col-md-3 col-lg-3 col-xl-3">
+                                {{ form_widget(form.dateRangeOption, {'attr': {'class': 'form-control' } }) }}{{ form_errors(form.dateRangeOption) }}
+                            </div>
+                            <div class="col-xs-12 col-sm-3 col-md-3 col-lg-3 col-xl-3">
+                                {{ form_widget(form.date_from, {'attr': {'class': 'form-control date' } }) }}{{ form_errors(form.date_from) }}
+                            </div>
+                        {% else %}
+                            {% if form.dateRangeOption is defined %}
+                                <div class="col-xs-12 col-sm-3 col-md-3 col-lg-2 col-xl-2 label">
+                                    <label>{{ form.dateRangeOption.vars.attr.selected_value }}</label>
+                                    {{ form_widget(form.dateRangeOption, {'attr': {'class': 'hidden' } }) }}{{ form_errors(form.dateRangeOption) }}
+                                </div>
+                                <div class="col-xs-12 col-sm-3 col-md-3 col-lg-3 col-xl-3">
+                                    {{ form_widget(form.date_from, {'attr': {'class': 'form-control date' } }) }}{{ form_errors(form.date_from) }}
+                                </div>
+                            {% else %}
+                                <div class="col-xs-12 col-sm-3 col-md-3 col-lg-2 col-xl-2 label">
+                                    {{ form_label(form.date_from) }}
+                                </div>
+                                <div class="col-xs-12 col-sm-3 col-md-3 col-lg-3 col-xl-3">
+                                    {{ form_widget(form.date_from, {'attr': {'class': 'form-control date' } }) }}{{ form_errors(form.date_from) }}
+                                </div>
+                            {% endif %}
+                        {% endif %}
+                        <div class="clearfix"></div>
+
+                        {% if form.dateRangeOption is defined and form.dateRangeToOption is defined %}
+                            <div class="col-xs-12 col-sm-3 col-md-3 col-lg-2 col-xl-2 label">
+                                <label>To:</label>
+                            </div>
+                            <div class="col-xs-12 col-sm-3 col-md-3 col-lg-3 col-xl-3">
+                                {{ form_widget(form.dateRangeToOption, {'attr': {'class': 'form-control' } }) }}{{ form_errors(form.dateRangeToOption) }}
+                            </div>
+                            <div class="col-xs-12 col-sm-3 col-md-3 col-lg-3 col-xl-3">
+                                {{ form_widget(form.date_to, {'attr': {'class': 'form-control date' } }) }}{{ form_errors(form.date_to) }}
+                            </div>
+                        {% else %}
+                            {% if form.dateRangeOption is defined %}
+                                <div class="col-xs-0 col-xs-12 col-sm-3 col-md-3 col-lg-2 col-xl-2 label">
+                                    <label>&nbsp;</label>
+                                </div>
+                                <div class="col-xs-12 col-sm-3 col-md-3 col-lg-3 col-xl-3">
+                                    {{ form_widget(form.date_to, {'attr': {'class': 'form-control date' } }) }}{{ form_errors(form.date_to) }}
+                                </div>
+                            {% else %}
+                                <div class="col-xs-0 col-sm-3 col-md-3 col-lg-2 col-xl-2 label"><label>&nbsp;</label></div>
+                                <div class="col-xs-12 col-sm-3 col-md-3 col-lg-3 col-xl-3">
+                                    {{ form_widget(form.date_to, {'attr': {'class': 'form-control date' } }) }}{{ form_errors(form.date_to) }}
+                                </div>
+                            {% endif %}
+                        {% endif %}
+                        <div class="clearfix"></div>
+
+                        {% if form.company is defined %}
+                        <div class="col-xs-12 col-sm-3 col-md-3 col-lg-2 col-xl-2 label">
+                            {{ form_label(form.company) }}:
+                        </div>
+                        <div class="col-xs-12 col-sm-3 col-md-3 col-lg-3 col-xl-3">
+                            {{ form_widget(form.company, {'attr': {'class': 'form-control' } }) }}{{ form_errors(form.company) }}
+                        </div>
+                        <div class="clearfix"></div>
+                        {% endif %}
+
+                        {% if form.includeUnawarded is defined %}
+                            <div class="col-xs-12 col-sm-3 col-md-3 col-lg-2 col-xl-2 label">
+                                {{ form_label(form.includeUnawarded) }}:
+                            </div>
+                            <div class="col-xs-12 col-sm-3 col-md-3 col-lg-3 col-xl-3">
+                                {{ form_widget(form.includeUnawarded, {'attr': {'class': 'form-control' } }) }}
+                            </div>
+                            <div class="clearfix"></div>
+                        {% endif %}
+
+                        {% if form.referral_filters is defined %}
+                            {% for referral_filter in form.referral_filters %}
+                                {% if referral_filter.report is defined %}{{ form_widget(referral_filter.report) }}{% endif %}
+                                {{ form_widget(referral_filter.for) }}{{ form_errors(referral_filter.for) }}
+                                {% set display_row = '' %}
+                                {% if referral_filter.entity_id.vars.attr.hide is defined and referral_filter.entity_id.vars.attr.hide %}
+                                    {% set display_row = 'display: none;' %}
+                                {% endif %}
+                                <div class="col-xs-12 col-sm-3 col-md-3 col-lg-2 col-xl-2 label" style="{{ display_row }}">
+                                    {{ form_label(referral_filter.for) }}
+                                </div>
+                                <div class="col-xs-12 col-sm-3 col-md-3 col-lg-3 col-xl-3" style="{{ display_row }}">
+                                    {{ form_widget(referral_filter.entity_id, {'attr': {'class': 'form-control' } }) }}{{ form_errors(referral_filter.entity_id) }}
+                                </div>
+                                <div class="clearfix" style="{{ display_row }}"></div>
+                            {% endfor %}
+                        {% endif %}
+
+                        {% if form.filters|count > 0 %}
+                            {% set filter_count = 0 %}
+                            {% set filter_number_count = 0 %}
+                            {% for filter in form.filters %}
+                                {% if filter.report is defined %}{{ form_widget(filter.report) }}{% endif %}
+                                {% set fixedbyfieldcondition = false %}
+                                {% if filter.byfield.vars.attr.fixedbyfieldcondition is defined %}
+                                    {% set fixedbyfieldcondition = filter.byfield.vars.attr.fixedbyfieldcondition %}
+                                {% endif %}
+                                {% set filter_count = filter_count + 1 %}
+
+                                {% if not fixedbyfieldcondition %}
+                                    {% set filter_number_count = filter_number_count + 1 %}
+                                    <div class="col-xs-12 col-sm-3 col-md-3 col-lg-2 col-xl-2 label">
+                                        <label for="form_filters_{{ filter_count-1 }}_byfield">{{ filter.byfield.vars.label }} {{ filter_number_count }}:</label>
+                                    </div>
+                                    <div class="col-xs-6 col-sm-3 col-md-3 col-lg-3 col-xl-3">
+                                        {{ form_widget(filter.byfield, {'attr': {'class': 'form-control form-filter' } }) }}{{ form_errors(filter.byfield) }}
+                                    </div>
+                                    <div class="col-xs-6 col-sm-3 col-md-3 col-lg-3 col-xl-3">
+                                        {{ form_widget(filter.condition, {'attr': {'class': 'form-control' } }) }}{{ form_errors(filter.condition) }}
+                                    </div>
+                                    <div class="col-xs-6 col-sm-2 col-md-2 col-lg-3 col-xl-3">
+                                        {{ form_widget(filter.value, {'attr': {'class': 'form-control' } }) }}{{ form_errors(filter.value) }}
+                                    </div>
+                                    <div class="col-xs-6 col-sm-1 col-md-1 col-lg-1 col-xl-1 field">
+                                        {% if filter_count == form.filters|count %}{% else %}AND{% endif %}
+                                    </div>
+                                    <div class="clearfix"></div>
+                                {% else %}
+                                    <div class="col-xs-12 col-sm-3 col-md-3 col-lg-2 col-xl-2 label">
+                                        <label for="form_filters_{{ filter_count-1 }}_byfield">{{ filter.byfield.vars.label }}:</label>
+                                        {{ form_widget(filter.byfield) }}{{ form_errors(filter.byfield) }}
+                                        {{ form_widget(filter.condition) }}{{ form_errors(filter.condition) }}
+                                    </div>
+                                    <div class="col-xs-12 col-sm-3 col-md-3 col-lg-3 col-xl-3">
+                                        {{ form_widget(filter.value, {'attr': {'class': 'form-control' } }) }}{{ form_errors(filter.value) }}
+                                    </div>
+                                    <div class="clearfix"></div>
+                                {% endif %}
+                            {% endfor %}
+                        {% else %}
+                            <span style="display: none;"> {{ form_label(form.filters) }}{{ form_widget(form.filters) }}</span>
+                        {% endif %}
+                    </div>
+
+                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                        <input type="hidden" name="referer" value="{{ app.request.headers.get('referer') }}"/>
+                        {{ form_end(form) }}
+                    </div>
+
+                    <div class="clearfix"></div>
+                </div>
+
+                <div id="report-table-wrapper" class="report scroll-div col-lg-12" style="padding-right: 0px;">
+                    <div id="report-grid" data-settings-id="report-kendo-grid-average-rate"></div>
+                </div>
+                <div class="clearfix"></div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{% block javascripts %}
+    {{ include('SmartMainBundle:Report:toolbar.html.twig') }}
+{% endblock %}
